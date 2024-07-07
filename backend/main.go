@@ -14,7 +14,6 @@ import (
 	"net/http"
 
 	"github.com/aws/aws-lambda-go/events"
-	"github.com/aws/aws-lambda-go/lambda"
 	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -24,51 +23,51 @@ import (
 
 var dbClient *mongo.Client
 
-// func main() {
-// 	router := gin.Default()
+func main() {
+	router := gin.Default()
 
-// 	// CORS middleware
-// 	router.Use(func(c *gin.Context) {
-// 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-// 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-// 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With, session")
-// 		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
+	// CORS middleware
+	router.Use(func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With, session")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
 
-// 		if c.Request.Method == "OPTIONS" {
-// 			c.AbortWithStatus(204)
-// 			return
-// 		}
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
 
-// 		c.Next()
-// 	})
+		c.Next()
+	})
 
-// 	dbClient = database.ConnectMongoDB()
-// 	IndexEmailId(dbClient)
+	dbClient = database.ConnectMongoDB()
+	IndexEmailId(dbClient)
 
-// 	// Auth
-// 	userStore := store.NewUserStore(dbClient, "travel", "users")
-// 	handler := api.NewHandler(userStore)
+	// Auth
+	userStore := store.NewUserStore(dbClient, "travel", "users")
+	handler := api.NewHandler(userStore)
 
-// 	router.POST("/api/register", handler.Register)
-// 	router.POST("/api/login", handler.Login)
-// 	router.POST("/api/refresh", handler.RefreshSession)
-// 	router.GET("/api/token", api.VerifyToken)
+	router.POST("/api/register", handler.Register)
+	router.POST("/api/login", handler.Login)
+	router.POST("/api/refresh", handler.RefreshSession)
+	router.GET("/api/token", api.VerifyToken)
 
-// 	protected := router.Group("/user").Use(ReadBodyIntoContext()).Use(middleware.JWTAuthMiddleware(dbClient))
-// 	{
-// 		protected.POST("/fetch", handler.FetchUser)
-// 		protected.POST("/search", api.CompletionHandler)
-// 		protected.POST("/dummy", api.DummyCall)
-// 		protected.POST("/all", handler.FetchAllUsers)
-// 		protected.POST("/update/status", handler.UpdateStatus)
-// 		protected.POST("/contact", handler.SendEmail)
-// 	}
+	protected := router.Group("/user").Use(ReadBodyIntoContext()).Use(middleware.JWTAuthMiddleware(dbClient))
+	{
+		protected.POST("/fetch", handler.FetchUser)
+		protected.POST("/search", api.CompletionHandler)
+		protected.POST("/dummy", api.DummyCall)
+		protected.POST("/all", handler.FetchAllUsers)
+		protected.POST("/update/status", handler.UpdateStatus)
+		protected.POST("/contact", handler.SendEmail)
+	}
 
-// 	// 	// Start the server
-// 	router.Run(":8080")
+	// 	// Start the server
+	router.Run(":8080")
 
-// 	defer dbClient.Disconnect(context.TODO())
-// }
+	defer dbClient.Disconnect(context.TODO())
+}
 
 func IndexEmailId(dbClient *mongo.Client) {
 	db := dbClient.Database("travel")
@@ -88,54 +87,54 @@ func IndexEmailId(dbClient *mongo.Client) {
 
 var ginLambda *ginadapter.GinLambda
 
-func init() {
-	router := gin.New()
+// func init() {
+// 	router := gin.New()
 
-	router.Use(gin.Logger())
+// 	router.Use(gin.Logger())
 
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
+// 	router.GET("/ping", func(c *gin.Context) {
+// 		c.JSON(200, gin.H{
+// 			"message": "pong",
+// 		})
+// 	})
 
-	router.Use(func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
+// 	router.Use(func(c *gin.Context) {
+// 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+// 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+// 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+// 		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
 
-		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(204)
-			return
-		}
+// 		if c.Request.Method == "OPTIONS" {
+// 			c.AbortWithStatus(204)
+// 			return
+// 		}
 
-		c.Next()
-	})
+// 		c.Next()
+// 	})
 
-	dbClient := database.ConnectMongoDB()
-	IndexEmailId(dbClient)
-	userStore := store.NewUserStore(dbClient, "travel", "users")
-	handler := api.NewHandler(userStore)
+// 	dbClient := database.ConnectMongoDB()
+// 	IndexEmailId(dbClient)
+// 	userStore := store.NewUserStore(dbClient, "travel", "users")
+// 	handler := api.NewHandler(userStore)
 
-	router.POST("/api/register", handler.Register)
-	router.POST("/api/login", handler.Login)
-	router.POST("/api/refresh", handler.RefreshSession)
-	router.GET("/api/token", api.VerifyToken)
+// 	router.POST("/api/register", handler.Register)
+// 	router.POST("/api/login", handler.Login)
+// 	router.POST("/api/refresh", handler.RefreshSession)
+// 	router.GET("/api/token", api.VerifyToken)
 
-	protected := router.Group("/user").Use(ReadBodyIntoContext()).Use(middleware.JWTAuthMiddleware(dbClient))
-	{
-		protected.POST("/fetch", handler.FetchUser)
-		protected.POST("/search", api.CompletionHandler)
-		protected.POST("/dummy", api.DummyCall)
-		protected.POST("/all", handler.FetchAllUsers)
-		protected.POST("/update/status", handler.UpdateStatus)
-		protected.POST("/contact", handler.SendEmail)
-	}
+// 	protected := router.Group("/user").Use(ReadBodyIntoContext()).Use(middleware.JWTAuthMiddleware(dbClient))
+// 	{
+// 		protected.POST("/fetch", handler.FetchUser)
+// 		protected.POST("/search", api.CompletionHandler)
+// 		protected.POST("/dummy", api.DummyCall)
+// 		protected.POST("/all", handler.FetchAllUsers)
+// 		protected.POST("/update/status", handler.UpdateStatus)
+// 		protected.POST("/contact", handler.SendEmail)
+// 	}
 
-	// Initialize ginadapter
-	ginLambda = ginadapter.New(router)
-}
+// 	// Initialize ginadapter
+// 	ginLambda = ginadapter.New(router)
+// }
 
 func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	// Log the incoming request (be cautious of logging sensitive information in production)
@@ -157,9 +156,9 @@ func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 	return resp, nil
 }
 
-func main() {
-	lambda.Start(Handler)
-}
+// func main() {
+// 	lambda.Start(Handler)
+// }
 
 func ReadBodyIntoContext() gin.HandlerFunc {
 	return func(c *gin.Context) {
