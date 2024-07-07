@@ -6,3 +6,9 @@
 
 ## zip file to upload on lambda
 `zip bootstrap.zip bootstrap PROD.env`
+
+## TO execute docker file
+ `docker build -t my-go-app .`
+
+## run application in docker
+`docker run -p 8080:8080 my-go-app`
