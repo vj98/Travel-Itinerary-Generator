@@ -237,7 +237,14 @@ func (h *Handler) SendEmail(c *gin.Context) {
 	subj, _ := data["subject"].(string)
 	content, _ := data["content"].(string)
 
-	apiKey := "re_Qh2CTUYP_BJ5qVzXMgbicEeo4WV8g62yg"
+	cfg, err := config.LoadConfig()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "status": http.StatusInternalServerError})
+		c.Abort()
+		return
+	}
+
+	apiKey := cfg.EmailAPIKey
 
 	client := resend.NewClient(apiKey)
 

@@ -76,7 +76,8 @@ func CompletionHandler(c *gin.Context) {
 	}
 
 	// Prepare and send the HTTP request to OpenAI
-	req, err := http.NewRequest("POST", "https://api.openai.com/v1/chat/completions", bytes.NewBuffer(jsonData))
+	url := "https://api.openai.com/v1/chat/completions"
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create request", "status": http.StatusInternalServerError})
 		return

@@ -12,3 +12,8 @@
 
 ## run application in docker
 `docker run -p 8080:8080 my-go-app`
+
+## To run test case
+move PROD.env to pkg/api/
+cd pkg/api/
+After that run `go test -v`
