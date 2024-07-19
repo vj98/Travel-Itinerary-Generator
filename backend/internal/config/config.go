@@ -7,9 +7,10 @@ import (
 )
 
 type Config struct {
-	MongoDBURI string
-	JWTSecret  string
-	OpenAIKey  string
+	MongoDBURI  string
+	JWTSecret   string
+	OpenAIKey   string
+	EmailAPIKey string
 }
 
 func LoadConfig() (*Config, error) {
@@ -23,8 +24,9 @@ func LoadConfig() (*Config, error) {
 	}
 
 	return &Config{
-		MongoDBURI: viper.GetString("MONGO_URI"),
-		JWTSecret:  viper.GetString("JWT_SECRET"),
-		OpenAIKey:  viper.GetString("OPEN_AI_KEY"),
+		MongoDBURI:  viper.GetString("MONGO_URI"),
+		JWTSecret:   viper.GetString("JWT_SECRET"),
+		OpenAIKey:   viper.GetString("OPEN_AI_KEY"),
+		EmailAPIKey: viper.GetString("EMAIL_API_KEY"),
 	}, nil
 }
