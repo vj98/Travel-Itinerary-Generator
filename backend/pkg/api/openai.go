@@ -47,22 +47,28 @@ type Usage struct {
 
 // Open AI api integration
 func CompletionHandler(c *gin.Context) {
-	var reqData struct {
-		Prompt string `json:"prompt"`
-	}
-	if err := c.ShouldBindJSON(&reqData); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request", "details": err.Error()})
+
+	body, exists := c.Get("body")
+	if !exists {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to retrieve body from context"})
 		return
 	}
 
-	log.Println("prompt ", reqData.Prompt)
+	// Convert interface{} to map[string]interface{}
+	data, ok := body.(map[string]interface{})
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Body is not in the expected format"})
+		return
+	}
+
+	log.Println("prompt ", data["prompt"].(string))
 
 	requestData := OpenAIRequest{
 		Model: "gpt-3.5-turbo",
 		Messages: []Message{
 			{
 				Role:    "user",
-				Content: reqData.Prompt,
+				Content: data["prompt"].(string),
 			},
 		},
 		Temperature: 0.8,

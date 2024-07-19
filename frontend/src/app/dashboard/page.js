@@ -95,7 +95,7 @@ const TripPlanner = () => {
       };
 
       const response = await callApi(
-        process.env.NEXT_PUBLIC_OPENAI_DUMMY,
+        process.env.NEXT_PUBLIC_FETCH_DATA_OPEN_AI,
         payload,
         "POST"
       );
@@ -114,7 +114,6 @@ const TripPlanner = () => {
   };
 
   const handleCountry = (e) => {
-    console.log("here");
     setContent("");
     setSelectedCountry(e);
   };

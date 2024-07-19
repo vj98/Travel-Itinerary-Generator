@@ -18,9 +18,9 @@ services:
       - "3000:3000"
     networks:
       - app-network
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+    environment:
+      NODE_ENV: production
+    command: npm start
 
 networks:
   app-network:
