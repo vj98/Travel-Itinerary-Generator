@@ -70,7 +70,7 @@ const TripPlanner = () => {
       setLoader(true);
 
       let prompt = `Write me an itinerary for ${days} days 
-    to ${selectedCountry} in the coming April. Describe the 
+    to ${selectedCountry} in the coming ${selectedMonth}. Describe the 
     weather that month, and also 5 things to take note 
     about this country's culture. Keep to a maximum travel area 
     to the size of Hokkaido, if possible, to minimize traveling time 
@@ -116,6 +116,10 @@ const TripPlanner = () => {
   const handleCountry = (e) => {
     setContent("");
     setSelectedCountry(e);
+  };
+
+  const handleChangeMonth = (e) => {
+    setSelectedMonth(e.target.value);
   };
 
   return (
@@ -178,7 +182,7 @@ const TripPlanner = () => {
                 <select
                   className="w-full p-2 bg-[#1A1A2E] rounded-md"
                   value={selectedMonth}
-                  onChange={(e) => setSelectedMonth(e.target.value)}
+                  onChange={(e) => handleChangeMonth(e)}
                 >
                   {months.map((month) => (
                     <option key={month} value={month}>
