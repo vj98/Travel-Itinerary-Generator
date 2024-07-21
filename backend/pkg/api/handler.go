@@ -251,8 +251,8 @@ func (h *Handler) SendEmail(c *gin.Context) {
 	content = fmt.Sprintf("<p> %v </p>", content)
 
 	params := &resend.SendEmailRequest{
-		From:    "Acme <onboarding@resend.dev>",
-		To:      []string{"travelplanner527@gmail.com"},
+		From:    cfg.EmailIdFrom,
+		To:      []string{cfg.EmailIdTo},
 		Subject: subj,
 		Html:    content,
 	}

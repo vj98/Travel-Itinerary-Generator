@@ -81,18 +81,18 @@ func CompletionHandler(c *gin.Context) {
 		return
 	}
 
-	// Prepare and send the HTTP request to OpenAI
-	url := "https://api.openai.com/v1/chat/completions"
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create request", "status": http.StatusInternalServerError})
-		return
-	}
-
 	cfg, err := config.LoadConfig()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "status": http.StatusInternalServerError})
 		c.Abort()
+		return
+	}
+
+	// Prepare and send the HTTP request to OpenAI
+	url := cfg.OpenAIUrl
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create request", "status": http.StatusInternalServerError})
 		return
 	}
 

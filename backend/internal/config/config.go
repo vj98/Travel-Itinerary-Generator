@@ -11,6 +11,9 @@ type Config struct {
 	JWTSecret   string
 	OpenAIKey   string
 	EmailAPIKey string
+	OpenAIUrl   string
+	EmailIdFrom string
+	EmailIdTo   string
 }
 
 func LoadConfig() (*Config, error) {
@@ -28,5 +31,8 @@ func LoadConfig() (*Config, error) {
 		JWTSecret:   viper.GetString("JWT_SECRET"),
 		OpenAIKey:   viper.GetString("OPEN_AI_KEY"),
 		EmailAPIKey: viper.GetString("EMAIL_API_KEY"),
+		OpenAIUrl:   viper.GetString("OPEN_AI_URL"),
+		EmailIdFrom: viper.GetString("EMAIL_ID_FROM"),
+		EmailIdTo:   viper.GetString("EMAIL_ID_TO"),
 	}, nil
 }
